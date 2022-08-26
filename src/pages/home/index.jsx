@@ -13,8 +13,6 @@ function Home() {
     }
 
     setStudents(oldState => [...oldState, newStudent]);
-
-    console.log(students);
   }
 
   return (
