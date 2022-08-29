@@ -1,41 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
-import Card from '../../components/card';
+import { Card, CardProps } from '../../components/card';
+
+type ApiGitHubResponse = {
+  name: string;
+  avatar_url: string;
+}
+
+type User = {
+  name: string;
+  avatar: string;
+}
 
 function Home() {
-  const [studentName, setStudentName] = useState(); // aqui posso definir um valor inicial useState('Ronald')
-  const [students, setStudents] = useState([]);
-  const [userGit, setUserGit] = useState({name: '', avatar: ''})
+  const [studentName, setStudentName] = useState(''); // aqui posso definir um valor inicial useState('Ronald')
+  const [students, setStudents] = useState<CardProps[]>([]);
+  const [userGit, setUserGit] = useState<User>({} as User)
 
   function addStudent() {
-    const newStudent = {
-      name: studentName,
-      time: new Date().toLocaleTimeString('pt-br', {hour: '2-digit', minute: '2-digit', second: '2-digit', })
+    const newStudent: CardProps = {
+      nome: studentName,
+      hora: new Date().toLocaleTimeString('pt-br', {hour: '2-digit', minute: '2-digit', second: '2-digit', })
     }
 
     setStudents(oldState => [...oldState, newStudent]);
   }
 
   useEffect(() => {
-    fetch('https://api.github.com/users/rdmuller')
+    /*fetch('https://api.github.com/users/rdmuller')
     .then(response => response.json())
     .then(data => {
       setUserGit({
         name: data.name,
         avatar: data.avatar_url,
       })
-    })
+    })*/
 
-    /* ### Outra forma de escrever o código acima
+    // ### Outra forma de escrever o código acima
     async function getUserGit() {
       const response = await fetch('https://api.github.com/users/rdmuller');
-      const data = await response.json()
+      const data = await response.json() as ApiGitHubResponse;
       setUserGit({
         name: data.name,
         avatar: data.avatar_url,
       })
     }
-    getUserGit()*/
+    getUserGit()
 
   }, []);
 
@@ -53,9 +63,9 @@ function Home() {
     {
       students.map(student => 
         <Card 
-          key={student.time}
-          nome={student.name} 
-          hora={student.time} />)
+          key={student.hora}
+          nome={student.nome} 
+          hora={student.hora} />)
     }
     </div>
   )
